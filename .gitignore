@@ -2,12 +2,20 @@
 
 # dependencies
 node_modules/
+/.pnp
+.pnp.js
+
+# testing
+/coverage
 
 # Expo
 .expo/
 dist/
 web-build/
 expo-env.d.ts
+*.apk
+*.aab
+*.ipa
 
 # Native
 *.orig.*
@@ -16,6 +24,7 @@ expo-env.d.ts
 *.p12
 *.key
 *.mobileprovision
+*.keystore
 
 # Metro
 .metro-health-check*
@@ -30,9 +39,23 @@ yarn-error.*
 *.pem
 
 # local env files
+.env
 .env*.local
+.env.development
+.env.test
+.env.production
 
 # typescript
 *.tsbuildinfo
+next-env.d.ts
 
-app-example
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Misc
+.qodo/
+app-example/
+*.log
