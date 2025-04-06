@@ -10,6 +10,7 @@ import {
   GoogleAuthProvider,
   signInWithCredential,
   AuthError,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
@@ -27,6 +28,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
+  resetPassword: (email: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -212,6 +214,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const resetPassword = async (email: string) => {
+    try {
+      await sendPasswordResetEmail(auth, email);
+      Toast.show({
+        type: "success",
+        text1: "Success",
+        text2: "Password reset email sent!",
+        position: "bottom",
+      });
+    } catch (error: any) {
+      const message = getErrorMessage(error);
+      Toast.show({
+        type: "error",
+        text1: "Reset Password Error",
+        text2: message,
+        position: "bottom",
+      });
+      throw new Error(message);
+    }
+  };
+
   const value = {
     user,
     loading,
@@ -219,6 +242,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signIn,
     signInWithGoogle,
     signOut,
+    resetPassword,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -45,9 +45,7 @@ export default function SettingsScreen() {
   }, [auth]);
 
   const handleProfile = () => {
-    Alert.alert("Profile", "Here you can edit your profile information", [
-      { text: "OK" },
-    ]);
+    router.push("/(tabs)/profile");
   };
 
   const handlePaymentMethods = () => {

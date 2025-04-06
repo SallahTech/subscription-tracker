@@ -43,18 +43,33 @@ function RootLayoutNav() {
       <Stack.Screen
         name="(tabs)"
         options={{
+          title: "Back",
           headerShown: false,
           // Prevent going back to auth screens
           gestureEnabled: false,
         }}
       />
+
+      {/* Add back login & register screens */}
       <Stack.Screen
-        name="auth"
+        name="auth/login"
         options={{
-          headerShown: false,
-          statusBarStyle: "dark",
-          // Prevent going back to tabs when not authenticated
-          gestureEnabled: false,
+          title: "Sign In", // This will now properly set the title
+          headerShown: true,
+        }}
+      />
+      <Stack.Screen
+        name="auth/register"
+        options={{
+          title: "Sign Up", // This will now properly set the title
+          headerShown: true,
+        }}
+      />
+      <Stack.Screen
+        name="auth/forgot-password"
+        options={{
+          title: "Reset Password", // This will now properly set the title
+          headerShown: true,
         }}
       />
       <Stack.Screen name="+not-found" />
