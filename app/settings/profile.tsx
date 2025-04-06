@@ -14,7 +14,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { DarkTheme, DefaultTheme } from "@react-navigation/native";
-import { FontAwesome } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import * as ImagePicker from "expo-image-picker";
 import { useTranslation } from "react-i18next";
@@ -30,8 +30,7 @@ export default function ProfileScreen() {
   const { user } = useAuth();
   const { currentTheme } = useTheme();
   const { t } = useTranslation();
-  const colors =
-    currentTheme === "dark" ? DarkTheme.colors : DefaultTheme.colors;
+  const colors = currentTheme === "dark" ? DarkTheme.colors : DefaultTheme.colors;
 
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -63,18 +62,28 @@ export default function ProfileScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => router.back()}
+          style={styles.backButton}
+        >
+          <Ionicons name="arrow-back" size={24} color={colors.text} />
+        </TouchableOpacity>
+        <ThemedText type="title">{t("profile.title")}</ThemedText>
+      </View>
+
       <ScrollView style={styles.content}>
-        <View style={styles.header}>
+        <View style={styles.profileHeader}>
           <TouchableOpacity onPress={pickImage} style={styles.avatarContainer}>
             {avatar ? (
               <Image source={{ uri: avatar }} style={styles.avatar} />
             ) : (
               <View style={[styles.avatar, { backgroundColor: colors.card }]}>
-                <FontAwesome name="user" size={40} color={colors.text} />
+                <Ionicons name="person" size={40} color={colors.text} />
               </View>
             )}
             <View style={styles.editAvatarButton}>
-              <FontAwesome name="camera" size={12} color="white" />
+              <Ionicons name="camera" size={12} color="white" />
             </View>
           </TouchableOpacity>
 
@@ -192,13 +201,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 16,
+    paddingTop: 60,
+    gap: 16,
+  },
+  backButton: {
+    padding: 8,
+  },
   content: {
     flex: 1,
   },
-  header: {
+  profileHeader: {
     alignItems: "center",
     padding: 20,
-    paddingTop: 60,
   },
   avatarContainer: {
     position: "relative",
@@ -238,7 +256,6 @@ const styles = StyleSheet.create({
   card: {
     borderRadius: 12,
     padding: 20,
-    marginBottom: 20,
   },
   cardHeader: {
     flexDirection: "row",
@@ -253,30 +270,28 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   label: {
-    fontSize: 14,
     marginBottom: 8,
-    color: "#64748B",
+    opacity: 0.7,
   },
   input: {
-    height: 50,
+    height: 48,
     borderWidth: 1,
     borderRadius: 8,
-    paddingHorizontal: 15,
+    paddingHorizontal: 16,
     fontSize: 16,
   },
   bioInput: {
-    height: 100,
+    height: 120,
     textAlignVertical: "top",
-    paddingTop: 15,
+    paddingTop: 12,
   },
   saveButton: {
-    marginTop: 20,
-    borderRadius: 8,
+    marginTop: 24,
     overflow: "hidden",
+    borderRadius: 8,
   },
   gradient: {
-    height: 50,
-    justifyContent: "center",
+    padding: 16,
     alignItems: "center",
   },
   saveButtonText: {
@@ -284,4 +299,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
   },
-});
+}); 

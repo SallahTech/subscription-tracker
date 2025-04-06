@@ -88,7 +88,7 @@
     "account": "Cuenta",
     "profile": "Perfil",
     "paymentMethods": "Métodos de Pago",
-    "notifications": "Notificaciones",
+    "notificationsTitle": "Notificaciones",
     "preferences": "Preferencias",
     "language": "Idioma",
     "currency": "Moneda",
@@ -108,6 +108,17 @@
     "helpMessage": "Contáctanos en support@subtracker.com",
     "aboutMessage": "Subscription Tracker v1.0.0\n\nRastrea y gestiona tus suscripciones con facilidad.",
     "logoutSuccess": "Sesión cerrada exitosamente"
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "enable": "Activar Notificaciones",
+    "enableDescription": "Recibe actualizaciones importantes sobre tus suscripciones",
+    "renewalReminders": "Recordatorios de Renovación",
+    "renewalRemindersDescription": "Recibe notificaciones antes de que se renueven tus suscripciones",
+    "priceChanges": "Cambios de Precio",
+    "priceChangesDescription": "Recibe notificaciones cuando cambien los precios de las suscripciones",
+    "weeklyReport": "Informe Semanal",
+    "weeklyReportDescription": "Recibe un resumen semanal de tus suscripciones"
   },
   "tabs": {
     "home": "Inicio",

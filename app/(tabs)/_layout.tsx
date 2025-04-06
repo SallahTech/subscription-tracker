@@ -1,12 +1,11 @@
 import { Tabs } from "expo-router";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@/contexts/ThemeContext";
 import { DarkTheme, DefaultTheme } from "@react-navigation/native";
 
 export default function TabLayout() {
   const { currentTheme } = useTheme();
-  const colors =
-    currentTheme === "dark" ? DarkTheme.colors : DefaultTheme.colors;
+  const colors = currentTheme === "dark" ? DarkTheme.colors : DefaultTheme.colors;
 
   return (
     <Tabs
@@ -38,11 +37,20 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name="family"
         options={{
-          title: "Profile",
+          title: "Family",
           tabBarIcon: ({ color }) => (
-            <FontAwesome name="user" size={24} color={color} />
+            <Ionicons name="people-outline" size={24} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="analytics"
+        options={{
+          title: "Analytics",
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="bar-chart-outline" size={24} color={color} />
           ),
         }}
       />
@@ -58,3 +66,4 @@ export default function TabLayout() {
     </Tabs>
   );
 }
+

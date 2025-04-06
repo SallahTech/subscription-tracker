@@ -14,6 +14,11 @@ import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { ThemeProvider, useTheme } from "@/contexts/ThemeContext";
 import "@/i18n"; // Import i18n configuration
 import { initializeLanguage } from "@/i18n";
+import { FamilyProvider } from '@/contexts/FamilyContext';
+import { I18nextProvider } from 'react-i18next';
+import i18n from '@/i18n';
+import { InvitationHandler } from '@/components/InvitationHandler';
+import { InvitationNotification } from '@/components/InvitationNotification';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -53,6 +58,15 @@ function RootLayoutNav() {
     initializeLanguage();
   }, []);
 
+  useEffect(() => {
+    // Debug i18n initialization
+    console.log('i18n state:', {
+      language: i18n.language,
+      isInitialized: i18n.isInitialized,
+      translations: i18n.getDataByLanguage(i18n.language)
+    });
+  }, []);
+
   return (
     <Stack>
       <Stack.Screen
@@ -79,6 +93,16 @@ function RootLayoutNav() {
         }}
       />
 
+      <Stack.Screen
+        name="subscription/share"
+        options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+        name="settings/profile"
+        options={{ headerShown: false }}
+      />
+
       <Stack.Screen name="+not-found" />
     </Stack>
   );
@@ -92,7 +116,13 @@ function ThemedApp() {
       value={currentTheme === "dark" ? DarkTheme : DefaultTheme}
     >
       <AuthProvider>
-        <RootLayoutNav />
+        <ThemeProvider>
+          <I18nextProvider i18n={i18n}>
+            <FamilyProvider>
+              <RootLayoutNav />
+            </FamilyProvider>
+          </I18nextProvider>
+        </ThemeProvider>
         <StatusBar style={currentTheme === "dark" ? "light" : "dark"} />
         <Toast />
       </AuthProvider>
@@ -111,13 +141,32 @@ export default function RootLayout() {
     }
   }, [loaded]);
 
+  useEffect(() => {
+    const init = async () => {
+      try {
+        await i18n.init();
+        console.log('i18n initialized successfully');
+      } catch (error) {
+        console.error('Error initializing i18n:', error);
+      }
+    };
+    init();
+  }, []);
+
   if (!loaded) {
     return null;
   }
 
   return (
-    <ThemeProvider>
-      <ThemedApp />
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider>
+        <I18nextProvider i18n={i18n}>
+          <FamilyProvider>
+            <InvitationHandler />
+            <ThemedApp />
+          </FamilyProvider>
+        </I18nextProvider>
+      </ThemeProvider>
+    </AuthProvider>
   );
 }

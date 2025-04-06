@@ -85,7 +85,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           type: "success",
           text1: "Welcome",
           text2: `Signed in as ${user.email}`,
-          position: "bottom",
+          position: "top",
         });
       }
     });
@@ -107,7 +107,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         type: "success",
         text1: "Success",
         text2: "Account created successfully!",
-        position: "bottom",
+        position: "top",
       });
     } catch (error: any) {
       const message = getErrorMessage(error);
@@ -115,7 +115,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         type: "error",
         text1: "Sign Up Error",
         text2: message,
-        position: "bottom",
+        position: "top",
       });
       throw new Error(message);
     }
@@ -128,7 +128,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         type: "success",
         text1: "Success",
         text2: "Signed in successfully!",
-        position: "bottom",
+        position: "top",
       });
     } catch (error: any) {
       const message = getErrorMessage(error);
@@ -136,7 +136,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         type: "error",
         text1: "Sign In Error",
         text2: message,
-        position: "bottom",
+        position: "top",
       });
       throw new Error(message);
     }
@@ -155,21 +155,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           type: "success",
           text1: "Success",
           text2: "Signed in with Google successfully!",
-          position: "bottom",
+          position: "top",
         });
       } else if (result?.type === "cancel") {
         Toast.show({
           type: "info",
           text1: "Cancelled",
           text2: "Google sign in was cancelled",
-          position: "bottom",
+          position: "top",
         });
       } else {
         Toast.show({
           type: "error",
           text1: "Error",
           text2: "Failed to sign in with Google",
-          position: "bottom",
+          position: "top",
         });
       }
     } catch (error: any) {
@@ -179,7 +179,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         type: "error",
         text1: "Google Sign In Error",
         text2: message,
-        position: "bottom",
+        position: "top",
       });
       throw new Error(message);
     }
@@ -196,10 +196,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         type: "success",
         text1: "Success",
         text2: "Signed out successfully",
-        position: "bottom",
+        position: "top",
       });
       console.log("AuthContext: Toast shown, navigating to login");
-      router.replace("/auth/login");
+      router.replace("/(auth)/login");
       console.log("AuthContext: Navigation completed");
     } catch (error: any) {
       console.error("AuthContext: SignOut error:", error);
@@ -208,7 +208,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         type: "error",
         text1: "Sign Out Error",
         text2: message,
-        position: "bottom",
+        position: "top",
       });
       throw new Error(message);
     }
@@ -221,7 +221,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         type: "success",
         text1: "Success",
         text2: "Password reset email sent!",
-        position: "bottom",
+        position: "top",
       });
     } catch (error: any) {
       const message = getErrorMessage(error);
@@ -229,7 +229,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         type: "error",
         text1: "Reset Password Error",
         text2: message,
-        position: "bottom",
+        position: "top",
       });
       throw new Error(message);
     }

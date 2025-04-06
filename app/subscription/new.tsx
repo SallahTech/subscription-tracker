@@ -13,6 +13,11 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { DarkTheme, DefaultTheme } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
+import { collection, addDoc } from 'firebase/firestore';
+import { useAuth } from '@/contexts/AuthContext';
+import { db } from '@/lib/firebase';
+import Toast from 'react-native-toast-message';
+import { getUserNotificationSettings, scheduleRenewalReminder } from '@/lib/notifications';
 
 const CATEGORIES = [
   "Streaming",
@@ -29,6 +34,8 @@ export default function AddSubscriptionScreen() {
   const colors =
     currentTheme === "dark" ? DarkTheme.colors : DefaultTheme.colors;
   const { t } = useTranslation();
+  const { user } = useAuth();
+
   const [subscription, setSubscription] = useState({
     name: "",
     amount: "",
@@ -42,9 +49,96 @@ export default function AddSubscriptionScreen() {
   const [customCategory, setCustomCategory] = useState("");
   const [categories, setCategories] = useState(CATEGORIES);
 
-  const handleSave = () => {
-    // TODO: Save new subscription to the database
-    router.back();
+  const handleSave = async () => {
+    try {
+      console.log('Current user:', user);
+      
+      if (!user) {
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'You must be logged in to add subscriptions',
+          position: 'top',  
+        });
+        return;
+      }
+
+      // Validate required fields
+      if (!subscription.name || !subscription.amount || !subscription.category) {
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'Please fill in all required fields',
+              position: 'top',
+        });
+        return;
+      }
+
+      // Prepare the subscription data
+      const subscriptionData = {
+        ...subscription,
+        userId: user.uid,
+        amount: parseFloat(subscription.amount),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+
+      console.log('Attempting to save subscription:', subscriptionData);
+
+      // Get a reference to the subscriptions collection
+      const subscriptionsRef = collection(db, 'subscriptions');
+      console.log('Collection reference created');
+
+      try {
+        // Attempt to add the document
+        const docRef = await addDoc(subscriptionsRef, subscriptionData);
+        console.log('Document written with ID:', docRef.id);
+        
+        // Schedule notification if enabled
+        if (user) {
+          const notificationSettings = await getUserNotificationSettings(user.uid);
+          if (notificationSettings.enabled && notificationSettings.renewalReminders) {
+            await scheduleRenewalReminder(
+              docRef.id,
+              subscriptionData.name,
+              new Date(subscriptionData.nextRenewal),
+              subscriptionData.amount,
+              notificationSettings.renewalReminderDays
+            );
+          }
+        }
+
+        Toast.show({
+          type: 'success',
+          text1: 'Success',
+          text2: 'Subscription added successfully',
+          position: 'bottom',
+        });
+        
+        router.back();
+      } catch (firestoreError: any) {
+        console.error('Detailed Firestore error:', {
+          code: firestoreError.code,
+          message: firestoreError.message,
+          details: firestoreError.details,
+          stack: firestoreError.stack
+        });
+        throw firestoreError;
+      }
+    } catch (error: any) {
+      console.error('Error adding subscription:', {
+        error: error,
+        message: error.message,
+        code: error.code
+      });
+      
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: `Failed to add subscription: ${error.message}`,
+        position: 'top',
+      });
+    }
   };
 
   const handleAddCustomCategory = () => {
@@ -223,7 +317,14 @@ export default function AddSubscriptionScreen() {
             <View style={styles.buttonContainer}>
               <Pressable
                 style={[styles.button, { backgroundColor: "#FF6B6B" }]}
-                onPress={handleSave}
+                onPress={()=>{
+                  // Toast.show({
+                  //   type: 'error',
+                  //   text1: 'Error',
+                  //   text2: 'Please fill in all required fields',
+                  //   position: 'bottom',
+                  // });
+                  handleSave()}}
               >
                 <ThemedText style={styles.buttonText}>
                   {t("subscriptions.save")}
@@ -353,14 +454,15 @@ const styles = StyleSheet.create({
   },
   button: {
     paddingVertical: 14,
+    paddingHorizontal: 24,
     borderRadius: 8,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   buttonText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   modalOverlay: {
     flex: 1,

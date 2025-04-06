@@ -88,7 +88,7 @@
     "account": "Hesap",
     "profile": "Profil",
     "paymentMethods": "Ödeme Yöntemleri",
-    "notifications": "Bildirimler",
+    "notificationsTitle": "Bildirimler",
     "preferences": "Tercihler",
     "language": "Dil",
     "currency": "Para Birimi",
@@ -108,6 +108,17 @@
     "helpMessage": "Bize support@subtracker.com adresinden ulaşın",
     "aboutMessage": "Subscription Tracker v1.0.0\n\nAboneliklerinizi kolayca takip edin ve yönetin.",
     "logoutSuccess": "Başarıyla çıkış yapıldı"
+  },
+  "notifications": {
+    "title": "Bildirimler",
+    "enable": "Bildirimleri Etkinleştir",
+    "enableDescription": "Abonelikleriniz hakkında önemli güncellemeler alın",
+    "renewalReminders": "Yenileme Hatırlatıcıları",
+    "renewalRemindersDescription": "Abonelikleriniz yenilenmeden önce bildirim alın",
+    "priceChanges": "Fiyat Değişiklikleri",
+    "priceChangesDescription": "Abonelik fiyatları değiştiğinde bildirim alın",
+    "weeklyReport": "Haftalık Rapor",
+    "weeklyReportDescription": "Aboneliklerinizin haftalık özetini alın"
   },
   "tabs": {
     "home": "Ana Sayfa",

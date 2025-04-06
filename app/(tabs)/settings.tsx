@@ -1,7 +1,7 @@
 import { StyleSheet, View, Pressable, ScrollView, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { ThemedText } from "@/components/ThemedText";
-import { FontAwesome } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useEffect } from "react";
@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 import { languages, changeLanguage } from "@/i18n";
 
 interface SettingItemProps {
-  icon: keyof typeof FontAwesome.glyphMap;
+  icon: keyof typeof Ionicons.glyphMap;
   title: string;
   onPress: () => void;
 }
@@ -22,10 +22,10 @@ function SettingItem({ icon, title, onPress }: SettingItemProps) {
       onPress={onPress}
     >
       <View style={styles.settingIcon}>
-        <FontAwesome name={icon} size={20} color="#64748B" />
+        <Ionicons name={icon} size={20} color="#64748B" />
       </View>
       <ThemedText style={styles.settingTitle}>{title}</ThemedText>
-      <FontAwesome name="chevron-right" size={16} color="#64748B" />
+      <Ionicons name="chevron-forward" size={16} color="#64748B" />
     </Pressable>
   );
 }
@@ -48,7 +48,7 @@ export default function SettingsScreen() {
   }, [auth]);
 
   const handleProfile = () => {
-    router.push("/(tabs)/profile");
+    router.push("/settings/profile");
   };
 
   const handlePaymentMethods = () => {
@@ -58,9 +58,7 @@ export default function SettingsScreen() {
   };
 
   const handleNotifications = () => {
-    Alert.alert(t("settings.notifications"), t("settings.notifications"), [
-      { text: "OK" },
-    ]);
+    router.push("/settings/notifications");
   };
 
   const handleLanguage = () => {
@@ -76,7 +74,7 @@ export default function SettingsScreen() {
             ? ("destructive" as const)
             : ("default" as const),
       })),
-      { text: t("common.cancel"), style: "cancel" as const },
+      { text: t("common.cancel"), style: "cancel" },
     ]);
   };
 
@@ -146,18 +144,18 @@ export default function SettingsScreen() {
           </ThemedText>
           <View style={[styles.settingsList, { backgroundColor: colors.card }]}>
             <SettingItem
-              icon="user"
+              icon="person-outline"
               title={t("settings.profile")}
               onPress={handleProfile}
             />
             <SettingItem
-              icon="credit-card"
+              icon="card-outline"
               title={t("settings.paymentMethods")}
               onPress={handlePaymentMethods}
             />
             <SettingItem
-              icon="bell"
-              title={t("settings.notifications")}
+              icon="notifications-outline"
+              title={t("settings.notificationsTitle")}
               onPress={handleNotifications}
             />
           </View>
@@ -169,17 +167,17 @@ export default function SettingsScreen() {
           </ThemedText>
           <View style={[styles.settingsList, { backgroundColor: colors.card }]}>
             <SettingItem
-              icon="globe"
+              icon="language-outline"
               title={t("settings.language")}
               onPress={handleLanguage}
             />
             <SettingItem
-              icon="dollar"
+              icon="cash-outline"
               title={t("settings.currency")}
               onPress={handleCurrency}
             />
             <SettingItem
-              icon="adjust"
+              icon="contrast-outline"
               title={t("settings.theme")}
               onPress={() => {
                 Alert.alert(
@@ -216,12 +214,12 @@ export default function SettingsScreen() {
           </ThemedText>
           <View style={[styles.settingsList, { backgroundColor: colors.card }]}>
             <SettingItem
-              icon="question-circle"
+              icon="help-circle-outline"
               title={t("settings.help")}
               onPress={handleHelp}
             />
             <SettingItem
-              icon="info-circle"
+              icon="information-circle-outline"
               title={t("settings.about")}
               onPress={handleAbout}
             />
