@@ -5,6 +5,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { DarkTheme, DefaultTheme } from "@react-navigation/native";
 import { VictoryPie } from "victory-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 
 // Temporary mock dataf
 const MOCK_SUBSCRIPTIONS = [
@@ -43,6 +44,7 @@ export default function DashboardScreen() {
   const colors =
     currentTheme === "dark" ? DarkTheme.colors : DefaultTheme.colors;
   const router = useRouter();
+  const { t } = useTranslation();
 
   // Calculate total spending and category data for pie chart
   const categoryData = MOCK_SUBSCRIPTIONS.reduce((acc, sub) => {
@@ -76,11 +78,13 @@ export default function DashboardScreen() {
       style={[styles.container, { backgroundColor: colors.background }]}
     >
       <View style={styles.header}>
-        <ThemedText type="title">Dashboard</ThemedText>
+        <ThemedText type="title">{t("tabs.home")}</ThemedText>
       </View>
 
       <View style={[styles.card, { backgroundColor: colors.card }]}>
-        <ThemedText type="subtitle">Total Monthly Spending</ThemedText>
+        <ThemedText type="subtitle">
+          {t("subscriptions.totalMonthlySpending")}
+        </ThemedText>
         <View style={styles.chartContainer}>
           <VictoryPie
             data={pieData}
@@ -98,14 +102,16 @@ export default function DashboardScreen() {
           />
           <View style={styles.totalContainer}>
             <ThemedText type="defaultSemiBold">
-              Total: ${totalSpending.toFixed(2)}
+              {t("subscriptions.total")} ${totalSpending.toFixed(2)}
             </ThemedText>
           </View>
         </View>
       </View>
 
       <View style={[styles.card, { backgroundColor: colors.card }]}>
-        <ThemedText type="subtitle">Upcoming Renewals</ThemedText>
+        <ThemedText type="subtitle">
+          {t("subscriptions.upcomingRenewals")}
+        </ThemedText>
         {upcomingRenewals.map((subscription) => (
           <Pressable
             key={subscription.id}
@@ -117,15 +123,15 @@ export default function DashboardScreen() {
                 {subscription.name}
               </ThemedText>
               <ThemedText style={{ color: colors.text + "80" }}>
-                Category: {subscription.category}
+                {t("subscriptions.category")} {subscription.category}
               </ThemedText>
               <ThemedText style={{ color: colors.text + "80" }}>
-                Amount: ${subscription.amount.toFixed(2)}
+                {t("subscriptions.amount")} ${subscription.amount.toFixed(2)}
               </ThemedText>
             </View>
             <View style={styles.renewalRight}>
               <ThemedText style={{ color: colors.text + "80" }}>
-                Due:{" "}
+                {t("subscriptions.due")}{" "}
                 {new Date(subscription.nextRenewal).toLocaleDateString(
                   "en-US",
                   {
@@ -145,7 +151,7 @@ export default function DashboardScreen() {
         onPress={() => router.push("/subscription/new")}
       >
         <ThemedText style={styles.addButtonText}>
-          Add New Subscription
+          {t("subscriptions.addNew")}
         </ThemedText>
       </Pressable>
     </ScrollView>

@@ -5,6 +5,7 @@ import {
   TextInput,
   ScrollView,
   Pressable,
+  Modal,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { ThemedText } from "@/components/ThemedText";
@@ -12,6 +13,7 @@ import { Button } from "components/Button";
 import { useTheme } from "@/contexts/ThemeContext";
 import { DarkTheme, DefaultTheme } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 
 // Mock data (in a real app, this would come from a database)
 const MOCK_SUBSCRIPTION = {
@@ -24,6 +26,16 @@ const MOCK_SUBSCRIPTION = {
   description: "Standard HD streaming plan",
 };
 
+// Default categories
+const CATEGORIES = [
+  "Streaming",
+  "Music",
+  "Gaming",
+  "Shopping",
+  "Software",
+  "Other",
+];
+
 export default function SubscriptionDetailScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
@@ -32,6 +44,12 @@ export default function SubscriptionDetailScreen() {
   const { currentTheme } = useTheme();
   const colors =
     currentTheme === "dark" ? DarkTheme.colors : DefaultTheme.colors;
+  const { t } = useTranslation();
+
+  // State for custom category modal
+  const [showCustomCategoryModal, setShowCustomCategoryModal] = useState(false);
+  const [customCategory, setCustomCategory] = useState("");
+  const [categories, setCategories] = useState(CATEGORIES);
 
   const handleSave = () => {
     // TODO: Save changes to the database
@@ -41,6 +59,15 @@ export default function SubscriptionDetailScreen() {
   const handleDelete = () => {
     // TODO: Delete subscription from the database
     router.back();
+  };
+
+  const handleAddCustomCategory = () => {
+    if (customCategory.trim()) {
+      setCategories([...categories, customCategory.trim()]);
+      setSubscription({ ...subscription, category: customCategory.trim() });
+      setCustomCategory("");
+      setShowCustomCategoryModal(false);
+    }
   };
 
   return (
@@ -66,7 +93,7 @@ export default function SubscriptionDetailScreen() {
           <Ionicons name="chevron-back" size={24} color={colors.text} />
         </Pressable>
         <ThemedText type="title">
-          {isEditing ? "Edit Subscription" : subscription.name}
+          {isEditing ? t("subscriptions.editSubscription") : subscription.name}
         </ThemedText>
       </View>
 
@@ -74,7 +101,7 @@ export default function SubscriptionDetailScreen() {
         {isEditing ? (
           <View style={styles.form}>
             <View style={styles.inputContainer}>
-              <ThemedText>Name</ThemedText>
+              <ThemedText>{t("subscriptions.name")}</ThemedText>
               <TextInput
                 style={[
                   styles.input,
@@ -89,12 +116,13 @@ export default function SubscriptionDetailScreen() {
                 onChangeText={(text) =>
                   setSubscription({ ...subscription, name: text })
                 }
+                placeholder={t("subscriptions.namePlaceholder")}
                 placeholderTextColor={colors.text + "80"}
               />
             </View>
 
             <View style={styles.inputContainer}>
-              <ThemedText>Amount</ThemedText>
+              <ThemedText>{t("subscriptions.amount")}</ThemedText>
               <TextInput
                 style={[
                   styles.input,
@@ -113,32 +141,49 @@ export default function SubscriptionDetailScreen() {
                   })
                 }
                 keyboardType="decimal-pad"
+                placeholder={t("subscriptions.amountPlaceholder")}
                 placeholderTextColor={colors.text + "80"}
               />
             </View>
 
             <View style={styles.inputContainer}>
-              <ThemedText>Category</ThemedText>
-              <TextInput
-                style={[
-                  styles.input,
-                  {
-                    backgroundColor:
-                      currentTheme === "dark" ? colors.card : "#fff",
-                    color: colors.text,
-                    borderColor: colors.border,
-                  },
-                ]}
-                value={subscription.category}
-                onChangeText={(text) =>
-                  setSubscription({ ...subscription, category: text })
-                }
-                placeholderTextColor={colors.text + "80"}
-              />
+              <ThemedText>{t("subscriptions.category")}</ThemedText>
+              <View style={styles.categoryContainer}>
+                <TextInput
+                  style={[
+                    styles.input,
+                    styles.categoryInput,
+                    {
+                      backgroundColor:
+                        currentTheme === "dark" ? colors.card : "#fff",
+                      color: colors.text,
+                      borderColor: colors.border,
+                    },
+                  ]}
+                  value={subscription.category}
+                  onChangeText={(text) =>
+                    setSubscription({ ...subscription, category: text })
+                  }
+                  placeholderTextColor={colors.text + "80"}
+                />
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.addCategoryButton,
+                    { opacity: pressed ? 0.7 : 1 },
+                  ]}
+                  onPress={() => setShowCustomCategoryModal(true)}
+                >
+                  <Ionicons
+                    name="add-circle"
+                    size={24}
+                    color={colors.primary}
+                  />
+                </Pressable>
+              </View>
             </View>
 
             <View style={styles.inputContainer}>
-              <ThemedText>Description</ThemedText>
+              <ThemedText>{t("subscriptions.description")}</ThemedText>
               <TextInput
                 style={[
                   styles.input,
@@ -156,35 +201,39 @@ export default function SubscriptionDetailScreen() {
                 }
                 multiline
                 numberOfLines={4}
+                placeholder={t("subscriptions.descriptionPlaceholder")}
                 placeholderTextColor={colors.text + "80"}
               />
             </View>
 
             <View style={styles.buttonContainer}>
-              <Button onPress={handleSave}>Save Changes</Button>
+              <Button onPress={handleSave}>
+                {t("subscriptions.saveChanges")}
+              </Button>
             </View>
           </View>
         ) : (
           <View>
             <View style={styles.detailItem}>
               <ThemedText style={{ color: colors.text + "80" }}>
-                Amount
+                {t("subscriptions.amount")}
               </ThemedText>
               <ThemedText type="defaultSemiBold">
-                ${subscription.amount.toFixed(2)}/month
+                ${subscription.amount.toFixed(2)}
+                {t("subscriptions.perMonth")}
               </ThemedText>
             </View>
 
             <View style={styles.detailItem}>
               <ThemedText style={{ color: colors.text + "80" }}>
-                Category
+                {t("subscriptions.category")}
               </ThemedText>
               <ThemedText>{subscription.category}</ThemedText>
             </View>
 
             <View style={styles.detailItem}>
               <ThemedText style={{ color: colors.text + "80" }}>
-                Next Renewal
+                {t("subscriptions.nextRenewal")}
               </ThemedText>
               <ThemedText>
                 {new Date(subscription.nextRenewal).toLocaleDateString()}
@@ -193,13 +242,15 @@ export default function SubscriptionDetailScreen() {
 
             <View style={styles.detailItem}>
               <ThemedText style={{ color: colors.text + "80" }}>
-                Description
+                {t("subscriptions.description")}
               </ThemedText>
               <ThemedText>{subscription.description}</ThemedText>
             </View>
 
             <View style={styles.buttonContainer}>
-              <Button onPress={() => setIsEditing(true)}>Edit</Button>
+              <Button onPress={() => setIsEditing(true)}>
+                {t("subscriptions.edit")}
+              </Button>
             </View>
           </View>
         )}
@@ -213,11 +264,66 @@ export default function SubscriptionDetailScreen() {
             onPress={handleDelete}
           >
             <ThemedText style={styles.deleteButtonText}>
-              Delete Subscription
+              {t("subscriptions.delete")}
             </ThemedText>
           </Pressable>
         </View>
       </View>
+
+      {/* Custom Category Modal */}
+      <Modal
+        visible={showCustomCategoryModal}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setShowCustomCategoryModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View
+            style={[
+              styles.modalContent,
+              {
+                backgroundColor: colors.background,
+                borderColor: colors.border,
+              },
+            ]}
+          >
+            <ThemedText type="title" style={styles.modalTitle}>
+              {t("subscriptions.addCustomCategory")}
+            </ThemedText>
+
+            <TextInput
+              style={[
+                styles.input,
+                {
+                  backgroundColor:
+                    currentTheme === "dark" ? colors.card : "#fff",
+                  color: colors.text,
+                  borderColor: colors.border,
+                },
+              ]}
+              value={customCategory}
+              onChangeText={setCustomCategory}
+              placeholder={t("subscriptions.customCategoryPlaceholder")}
+              placeholderTextColor={colors.text + "80"}
+            />
+
+            <View style={styles.modalButtons}>
+              <Button
+                onPress={() => setShowCustomCategoryModal(false)}
+                style={styles.modalButton}
+              >
+                {t("common.cancel")}
+              </Button>
+              <Button
+                onPress={handleAddCustomCategory}
+                style={styles.modalButton}
+              >
+                {t("common.save")}
+              </Button>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 }
@@ -284,5 +390,41 @@ const styles = StyleSheet.create({
     color: "#ffffff",
     fontSize: 16,
     fontWeight: "600",
+  },
+  categoryContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  categoryInput: {
+    flex: 1,
+    marginRight: 8,
+  },
+  addCategoryButton: {
+    padding: 8,
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    width: "80%",
+    padding: 20,
+    borderRadius: 12,
+    borderWidth: 1,
+  },
+  modalTitle: {
+    marginBottom: 16,
+    textAlign: "center",
+  },
+  modalButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 20,
+  },
+  modalButton: {
+    flex: 1,
+    marginHorizontal: 8,
   },
 });

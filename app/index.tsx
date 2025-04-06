@@ -1,12 +1,16 @@
 import { StyleSheet, View } from "react-native";
-import { Link } from "expo-router";
+import { useRouter } from "expo-router";
 import { ThemedText } from "@/components/ThemedText";
 import { Button } from "components/Button";
+import { WelcomeAnimation } from "@/components/WelcomeAnimation";
 
 export default function WelcomeScreen() {
+  const router = useRouter();
+
   return (
     <View style={styles.container}>
       <View style={styles.content}>
+        <WelcomeAnimation />
         <ThemedText type="title" style={styles.title}>
           Track your subscriptions with ease
         </ThemedText>
@@ -16,9 +20,9 @@ export default function WelcomeScreen() {
         </ThemedText>
       </View>
       <View style={styles.buttonContainer}>
-        <Link href="/auth/signup" asChild>
-          <Button>Get Started</Button>
-        </Link>
+        <Button onPress={() => router.push("/(auth)/login")}>
+          Get Started
+        </Button>
       </View>
     </View>
   );

@@ -4,6 +4,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { Button } from "components/Button";
 import { DarkTheme, DefaultTheme } from "@react-navigation/native";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useTranslation } from "react-i18next";
 
 // Using the same mock data from the home screen
 const MOCK_SUBSCRIPTIONS = [
@@ -37,6 +38,7 @@ export default function SubscriptionsScreen() {
   const { currentTheme } = useTheme();
   const colors =
     currentTheme === "dark" ? DarkTheme.colors : DefaultTheme.colors;
+  const { t } = useTranslation();
 
   const totalMonthly = MOCK_SUBSCRIPTIONS.reduce(
     (sum, sub) => sum + sub.amount,
@@ -46,9 +48,9 @@ export default function SubscriptionsScreen() {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.header}>
-        <ThemedText type="title">Subscriptions</ThemedText>
+        <ThemedText type="title">{t("tabs.subscriptions")}</ThemedText>
         <View style={styles.totalContainer}>
-          <ThemedText>Total monthly cost</ThemedText>
+          <ThemedText>{t("subscriptions.totalMonthlySpending")}</ThemedText>
           <ThemedText type="title">${totalMonthly.toFixed(2)}</ThemedText>
         </View>
       </View>
@@ -82,7 +84,7 @@ export default function SubscriptionsScreen() {
                   <ThemedText type="defaultSemiBold">
                     ${subscription.amount.toFixed(2)}
                   </ThemedText>
-                  <ThemedText>/month</ThemedText>
+                  <ThemedText>{t("subscriptions.perMonth")}</ThemedText>
                 </View>
               </Pressable>
             </Link>
@@ -92,7 +94,7 @@ export default function SubscriptionsScreen() {
 
       <View style={styles.fab}>
         <Link href="/subscription/new" asChild>
-          <Button onPress={() => {}}>Add Subscription</Button>
+          <Button onPress={() => {}}>{t("subscriptions.addNew")}</Button>
         </Link>
       </View>
     </View>

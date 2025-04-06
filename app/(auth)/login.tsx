@@ -18,6 +18,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { LinearGradient } from "expo-linear-gradient";
 import { DarkTheme, DefaultTheme } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -27,6 +28,7 @@ export default function LoginScreen() {
   const router = useRouter();
   const { signIn, signInWithGoogle } = useAuth();
   const { currentTheme } = useTheme();
+  const { t } = useTranslation();
   const colors =
     currentTheme === "dark" ? DarkTheme.colors : DefaultTheme.colors;
 
@@ -58,7 +60,7 @@ export default function LoginScreen() {
 
   return (
     <>
-      <Stack.Screen options={{ title: "Sign In" }} />
+      <Stack.Screen options={{ title: t("auth.signIn") }} />
 
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -80,7 +82,7 @@ export default function LoginScreen() {
                   borderColor: colors.border,
                 },
               ]}
-              placeholder="Email"
+              placeholder={t("auth.email")}
               placeholderTextColor={colors.text + "80"}
               value={email}
               onChangeText={setEmail}
@@ -98,7 +100,7 @@ export default function LoginScreen() {
                     borderColor: colors.border,
                   },
                 ]}
-                placeholder="Password"
+                placeholder={t("auth.password")}
                 placeholderTextColor={colors.text + "80"}
                 value={password}
                 onChangeText={setPassword}
@@ -121,7 +123,7 @@ export default function LoginScreen() {
             >
               <Pressable style={styles.forgotPassword}>
                 <ThemedText style={{ color: "#FF6B6B" }}>
-                  Forgot Password?
+                  {t("auth.forgotPassword")}
                 </ThemedText>
               </Pressable>
             </TouchableOpacity>
@@ -138,7 +140,11 @@ export default function LoginScreen() {
                 style={styles.gradient}
               >
                 <ThemedText style={styles.buttonText}>
-                  {loading ? <ActivityIndicator color="#FFFFFF" /> : "Sign In"}
+                  {loading ? (
+                    <ActivityIndicator color="#FFFFFF" />
+                  ) : (
+                    t("auth.signIn")
+                  )}
                 </ThemedText>
               </LinearGradient>
             </TouchableOpacity>
@@ -148,7 +154,7 @@ export default function LoginScreen() {
                 style={[styles.dividerLine, { backgroundColor: colors.border }]}
               />
               <ThemedText style={{ color: colors.text + "80" }}>
-                or continue with
+                {t("auth.orContinueWith")}
               </ThemedText>
               <View
                 style={[styles.dividerLine, { backgroundColor: colors.border }]}
@@ -173,7 +179,7 @@ export default function LoginScreen() {
                 style={styles.socialIcon}
               />
               <ThemedText style={styles.socialButtonText}>
-                Sign in with Google
+                {t("auth.signInWithGoogle")}
               </ThemedText>
             </TouchableOpacity>
 
@@ -195,25 +201,27 @@ export default function LoginScreen() {
                 style={styles.socialIcon}
               />
               <ThemedText style={styles.socialButtonText}>
-                Continue with Apple
+                {t("auth.continueWithApple")}
               </ThemedText>
             </TouchableOpacity>
 
-            <View style={styles.footer}>
+            <TouchableOpacity
+              onPress={() => router.push("/")}
+              style={styles.backButton}
+            >
               <ThemedText style={{ color: colors.text + "80" }}>
-                Don't have an account?
+                {t("common.backToWelcome")}
               </ThemedText>
-              <TouchableOpacity
-                onPress={() => router.push("/auth/register")}
-                style={styles.linkButton}
-              >
-                <ThemedText
-                  style={[styles.linkText, { color: colors.primary }]}
-                >
-                  Sign up
-                </ThemedText>
-              </TouchableOpacity>
-            </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => router.push("/(auth)/register")}
+              style={styles.linkButton}
+            >
+              <ThemedText style={[styles.linkText, { color: colors.primary }]}>
+                {t("auth.dontHaveAccount")}
+              </ThemedText>
+            </TouchableOpacity>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -305,5 +313,10 @@ const styles = StyleSheet.create({
   linkText: {
     fontSize: 14,
     fontWeight: "600",
+  },
+  backButton: {
+    marginTop: 20,
+    alignItems: "center",
+    padding: 10,
   },
 });

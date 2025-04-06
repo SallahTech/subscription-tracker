@@ -8,6 +8,7 @@ import {
   Platform,
   ScrollView,
   Pressable,
+  ActivityIndicator,
 } from "react-native";
 import { Stack, useRouter } from "expo-router";
 import { useAuth } from "@/contexts/AuthContext";
@@ -17,6 +18,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { LinearGradient } from "expo-linear-gradient";
 import { DarkTheme, DefaultTheme } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 
 export default function RegisterScreen() {
   const [name, setName] = useState("");
@@ -27,6 +29,7 @@ export default function RegisterScreen() {
   const router = useRouter();
   const { signUp } = useAuth();
   const { currentTheme } = useTheme();
+  const { t } = useTranslation();
   const colors =
     currentTheme === "dark" ? DarkTheme.colors : DefaultTheme.colors;
 
@@ -45,7 +48,7 @@ export default function RegisterScreen() {
 
   return (
     <>
-      <Stack.Screen options={{ title: "Sign Up" }} />
+      <Stack.Screen options={{ title: t("auth.signUp") }} />
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={[styles.container, { backgroundColor: colors.background }]}
@@ -58,12 +61,12 @@ export default function RegisterScreen() {
 
           <View style={styles.form}>
             <ThemedText type="title" style={styles.title}>
-              Create Account
+              {t("auth.signUp")}
             </ThemedText>
             <ThemedText
               style={[styles.subtitle, { color: colors.text + "80" }]}
             >
-              Sign up to start tracking your subscriptions
+              {t("auth.signUpDescription")}
             </ThemedText>
 
             <TextInput
@@ -75,7 +78,7 @@ export default function RegisterScreen() {
                   borderColor: colors.border,
                 },
               ]}
-              placeholder="Full Name"
+              placeholder={t("auth.name")}
               placeholderTextColor={colors.text + "80"}
               value={name}
               onChangeText={setName}
@@ -91,7 +94,7 @@ export default function RegisterScreen() {
                   borderColor: colors.border,
                 },
               ]}
-              placeholder="Email"
+              placeholder={t("auth.email")}
               placeholderTextColor={colors.text + "80"}
               value={email}
               onChangeText={setEmail}
@@ -109,7 +112,7 @@ export default function RegisterScreen() {
                     borderColor: colors.border,
                   },
                 ]}
-                placeholder="Password"
+                placeholder={t("auth.password")}
                 placeholderTextColor={colors.text + "80"}
                 value={password}
                 onChangeText={setPassword}
@@ -130,7 +133,12 @@ export default function RegisterScreen() {
             <TouchableOpacity
               onPress={handleRegister}
               disabled={loading}
-              style={styles.buttonContainer}
+              style={[
+                styles.button,
+                {
+                  opacity: loading ? 0.7 : 1,
+                },
+              ]}
             >
               <LinearGradient
                 colors={["#FF6B6B", "#FF8E8E"]}
@@ -138,18 +146,31 @@ export default function RegisterScreen() {
                 end={{ x: 1, y: 0 }}
                 style={styles.gradient}
               >
-                <ThemedText style={styles.buttonText}>
-                  {loading ? "Creating account..." : "Create Account"}
-                </ThemedText>
+                {loading ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <ThemedText style={styles.buttonText}>
+                    {t("auth.register")}
+                  </ThemedText>
+                )}
               </LinearGradient>
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => router.push("/auth/login")}
+              onPress={() => router.push("/login")}
               style={styles.linkButton}
             >
-              <ThemedText style={[styles.linkText, { color: colors.primary }]}>
-                Already have an account? Sign in
+              <ThemedText style={{ color: colors.text + "80" }}>
+                {t("auth.alreadyHaveAccount")}
+              </ThemedText>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => router.push("/")}
+              style={styles.backButton}
+            >
+              <ThemedText style={{ color: colors.text + "80" }}>
+                {t("common.backToWelcome")}
               </ThemedText>
             </TouchableOpacity>
           </View>
@@ -197,7 +218,7 @@ const styles = StyleSheet.create({
     right: 12,
     top: 12,
   },
-  buttonContainer: {
+  button: {
     marginTop: 10,
     borderRadius: 8,
     overflow: "hidden",
@@ -216,7 +237,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
     alignItems: "center",
   },
-  linkText: {
-    fontSize: 14,
+  backButton: {
+    marginTop: 20,
+    alignItems: "center",
+    padding: 10,
   },
 });

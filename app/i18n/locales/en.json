@@ -8,7 +8,8 @@
     "error": "Error",
     "success": "Success",
     "confirm": "Confirm",
-    "back": "Back"
+    "back": "Back",
+    "backToWelcome": "Back to Welcome"
   },
   "auth": {
     "signIn": "Sign In",
@@ -28,7 +29,9 @@
     "backToSignIn": "Back to Sign In",
     "confirmPassword": "Confirm Password",
     "name": "Name",
-    "sendResetLink": "Send Reset Link"
+    "sendResetLink": "Send Reset Link",
+    "signUpDescription": "Create your account to start tracking your subscriptions",
+    "register": "Register"
   },
   "profile": {
     "personalInfo": "Personal Information",
@@ -46,16 +49,39 @@
   "subscriptions": {
     "addNew": "Add New Subscription",
     "delete": "Delete Subscription",
-    "edit": "Edit Subscription",
-    "name": "Subscription Name",
+    "edit": "Edit",
+    "editSubscription": "Edit Subscription",
+    "name": "Name",
     "amount": "Amount",
     "category": "Category",
-    "nextRenewal": "Next Renewal",
     "description": "Description",
+    "nextRenewal": "Next Renewal",
+    "saveChanges": "Save Changes",
+    "perMonth": "/month",
     "confirmDelete": "Are you sure you want to delete this subscription?",
     "deleteSuccess": "Subscription deleted successfully",
     "addSuccess": "Subscription added successfully",
-    "updateSuccess": "Subscription updated successfully"
+    "updateSuccess": "Subscription updated successfully",
+    "total": "Total",
+    "totalMonthlySpending": "Total Monthly Spending",
+    "upcomingRenewals": "Upcoming Renewals",
+    "due": "Due",
+    "namePlaceholder": "Enter subscription name",
+    "amountPlaceholder": "0.00",
+    "nextRenewalPlaceholder": "YYYY-MM-DD",
+    "descriptionPlaceholder": "Add a description (optional)",
+    "save": "Save Subscription",
+    "addCustomCategory": "Add Custom Category",
+    "customCategoryPlaceholder": "Enter category name",
+    "categories": {
+      "entertainment": "Entertainment",
+      "streaming": "Streaming",
+      "music": "Music",
+      "gaming": "Gaming",
+      "news": "News",
+      "fitness": "Fitness",
+      "other": "Other"
+    }
   },
   "settings": {
     "settings": "Settings",

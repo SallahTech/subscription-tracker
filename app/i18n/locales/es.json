@@ -8,7 +8,8 @@
     "error": "Error",
     "success": "Éxito",
     "confirm": "Confirmar",
-    "back": "Atrás"
+    "back": "Atrás",
+    "backToWelcome": "Volver a Bienvenida"
   },
   "auth": {
     "signIn": "Iniciar Sesión",
@@ -17,7 +18,7 @@
     "password": "Contraseña",
     "forgotPassword": "¿Olvidaste tu contraseña?",
     "resetPassword": "Restablecer Contraseña",
-    "sendResetInstructions": "Enviar Instrucciones",
+    "sendResetInstructions": "Enviar Instrucciones de Restablecimiento",
     "sending": "Enviando...",
     "dontHaveAccount": "¿No tienes una cuenta?",
     "alreadyHaveAccount": "¿Ya tienes una cuenta?",
@@ -28,7 +29,9 @@
     "backToSignIn": "Volver a Iniciar Sesión",
     "confirmPassword": "Confirmar Contraseña",
     "name": "Nombre",
-    "sendResetLink": "Enviar Enlace de Restablecimiento"
+    "sendResetLink": "Enviar Enlace de Restablecimiento",
+    "signUpDescription": "Crea tu cuenta para comenzar a rastrear tus suscripciones",
+    "register": "Registrarse"
   },
   "profile": {
     "personalInfo": "Información Personal",
@@ -41,30 +44,44 @@
     "saveChanges": "Guardar Cambios",
     "profileUpdated": "¡Perfil actualizado exitosamente!",
     "permissionRequired": "Permiso Requerido",
-    "cameraRollPermission": "Por favor, concede permisos de acceso a la galería para cambiar tu foto de perfil."
+    "cameraRollPermission": "Por favor, otorga permisos de acceso a la galería para cambiar tu foto de perfil."
   },
   "subscriptions": {
     "addNew": "Agregar Nueva Suscripción",
+    "delete": "Eliminar Suscripción",
+    "edit": "Editar",
     "editSubscription": "Editar Suscripción",
-    "subscriptionName": "Nombre de la Suscripción",
-    "enterName": "Ingresa el nombre de la suscripción",
+    "name": "Nombre",
     "amount": "Monto",
-    "enterAmount": "Ingresa el monto",
     "category": "Categoría",
-    "selectCategory": "Selecciona una categoría",
-    "nextRenewal": "Próxima Renovación",
-    "selectDate": "Selecciona una fecha",
     "description": "Descripción",
-    "enterDescription": "Ingresa una descripción (opcional)",
-    "saveSubscription": "Guardar Suscripción",
-    "deleteSubscription": "Eliminar Suscripción",
-    "deleteConfirmation": "¿Estás seguro de que quieres eliminar esta suscripción?",
-    "subscriptionSaved": "¡Suscripción guardada con éxito!",
-    "subscriptionDeleted": "¡Suscripción eliminada con éxito!",
+    "nextRenewal": "Próxima Renovación",
+    "saveChanges": "Guardar Cambios",
+    "perMonth": "/mes",
     "confirmDelete": "¿Estás seguro de que deseas eliminar esta suscripción?",
     "deleteSuccess": "Suscripción eliminada exitosamente",
     "addSuccess": "Suscripción agregada exitosamente",
-    "updateSuccess": "Suscripción actualizada exitosamente"
+    "updateSuccess": "Suscripción actualizada exitosamente",
+    "total": "Total",
+    "totalMonthlySpending": "Gasto Mensual Total",
+    "upcomingRenewals": "Próximas Renovaciones",
+    "due": "Vence",
+    "namePlaceholder": "Ingresa el nombre de la suscripción",
+    "amountPlaceholder": "0.00",
+    "nextRenewalPlaceholder": "AAAA-MM-DD",
+    "descriptionPlaceholder": "Agrega una descripción (opcional)",
+    "save": "Guardar Suscripción",
+    "addCustomCategory": "Agregar Categoría Personalizada",
+    "customCategoryPlaceholder": "Ingresa el nombre de la categoría",
+    "categories": {
+      "entertainment": "Entretenimiento",
+      "streaming": "Streaming",
+      "music": "Música",
+      "gaming": "Videojuegos",
+      "news": "Noticias",
+      "fitness": "Fitness",
+      "other": "Otro"
+    }
   },
   "settings": {
     "settings": "Configuración",
@@ -80,7 +97,7 @@
     "help": "Ayuda y Soporte",
     "about": "Acerca de",
     "logout": "Cerrar Sesión",
-    "logoutConfirmation": "¿Estás seguro de que quieres cerrar sesión?",
+    "logoutConfirmation": "¿Estás seguro de que deseas cerrar sesión?",
     "logoutError": "Error al cerrar sesión. Por favor, inténtalo de nuevo.",
     "selectLanguage": "Selecciona tu idioma preferido",
     "selectCurrency": "Selecciona tu moneda preferida",
@@ -90,7 +107,6 @@
     "system": "Sistema",
     "helpMessage": "Contáctanos en support@subtracker.com",
     "aboutMessage": "Subscription Tracker v1.0.0\n\nRastrea y gestiona tus suscripciones con facilidad.",
-    "confirmLogout": "¿Estás seguro de que deseas cerrar sesión?",
     "logoutSuccess": "Sesión cerrada exitosamente"
   },
   "tabs": {

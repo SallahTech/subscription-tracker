@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useAuth } from "@/contexts/AuthContext";
-import { ThemedText } from "@/components/ThemedText";
+import { ThemedText } from "components/ThemedText";
 import { AuthAnimation } from "@/components/AuthAnimation";
 import { useTheme } from "@/contexts/ThemeContext";
 import { LinearGradient } from "expo-linear-gradient";

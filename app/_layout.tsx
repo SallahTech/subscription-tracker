@@ -27,16 +27,24 @@ function RootLayoutNav() {
   useEffect(() => {
     if (loading) return;
 
-    const inAuthGroup = segments[0] === "auth";
+    const inAuthGroup = segments[0] === "(auth)";
+    const inTabsGroup = segments[0] === "(tabs)";
     console.log("Current route segment:", segments[0]);
-    console.log("Auth state:", { user: user?.email, loading, inAuthGroup });
+    console.log("Auth state:", {
+      user: user?.email,
+      loading,
+      inAuthGroup,
+      inTabsGroup,
+    });
 
-    if (!user && !inAuthGroup) {
-      console.log("Redirecting to login...");
-      router.replace("/auth/login");
-    } else if (user && inAuthGroup) {
+    // Only redirect if user is authenticated and trying to access auth screens
+    // or if user is not authenticated and trying to access protected screens
+    if (user && inAuthGroup) {
       console.log("Redirecting to home...");
       router.replace("/(tabs)");
+    } else if (!user && inTabsGroup) {
+      console.log("Redirecting to welcome...");
+      router.replace("/");
     }
   }, [user, loading, segments]);
 
@@ -48,6 +56,13 @@ function RootLayoutNav() {
   return (
     <Stack>
       <Stack.Screen
+        name="index"
+        options={{
+          headerShown: false,
+        }}
+      />
+
+      <Stack.Screen
         name="(tabs)"
         options={{
           title: "Back",
@@ -57,28 +72,13 @@ function RootLayoutNav() {
         }}
       />
 
-      {/* Add back login & register screens */}
       <Stack.Screen
-        name="auth/login"
+        name="(auth)"
         options={{
-          title: "Sign In", // This will now properly set the title
-          headerShown: true,
+          headerShown: false,
         }}
       />
-      <Stack.Screen
-        name="auth/register"
-        options={{
-          title: "Sign Up", // This will now properly set the title
-          headerShown: true,
-        }}
-      />
-      <Stack.Screen
-        name="auth/forgot-password"
-        options={{
-          title: "Reset Password", // This will now properly set the title
-          headerShown: true,
-        }}
-      />
+
       <Stack.Screen name="+not-found" />
     </Stack>
   );
