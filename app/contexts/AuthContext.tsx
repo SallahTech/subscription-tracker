@@ -56,21 +56,20 @@ const getErrorMessage = (error: AuthError) => {
   }
 };
 
+const googleConfig = {
+  iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
+  androidClientId: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID,
+  webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
+  scopes: ["openid", "profile", "email"],
+};
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   // Set up Google auth request at the component level
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    iosClientId:
-      "198486382634-aq52r29kqajcjmqgti2598tijiibbl08.apps.googleusercontent.com",
-    androidClientId:
-      "198486382634-gubis32ij91gst5kfu18n5j813pkc79k.apps.googleusercontent.com",
-    webClientId:
-      "198486382634-5ajm2i0m7bsld3g4fkea58dsjpv2mhno.apps.googleusercontent.com",
-    scopes: ["openid", "profile", "email"],
-  });
+  const [request, response, promptAsync] = Google.useAuthRequest(googleConfig);
 
   // Initialize auth state
   useEffect(() => {
