@@ -12,6 +12,8 @@ import "react-native-reanimated";
 import Toast from "react-native-toast-message";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { ThemeProvider, useTheme } from "@/contexts/ThemeContext";
+import "@/i18n"; // Import i18n configuration
+import { initializeLanguage } from "@/i18n";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -37,6 +39,11 @@ function RootLayoutNav() {
       router.replace("/(tabs)");
     }
   }, [user, loading, segments]);
+
+  // Initialize language from storage
+  useEffect(() => {
+    initializeLanguage();
+  }, []);
 
   return (
     <Stack>

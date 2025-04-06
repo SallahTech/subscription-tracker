@@ -158,7 +158,8 @@ const styles = StyleSheet.create({
   },
   header: {
     padding: 16,
-    paddingTop: 20,
+    paddingTop: 48,
+    marginBottom: 8,
   },
   card: {
     margin: 16,

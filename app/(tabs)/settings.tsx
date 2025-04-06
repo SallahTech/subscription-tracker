@@ -6,6 +6,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useEffect } from "react";
 import { DarkTheme, DefaultTheme } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
+import { languages, changeLanguage } from "@/i18n";
 
 interface SettingItemProps {
   icon: keyof typeof FontAwesome.glyphMap;
@@ -32,6 +34,7 @@ export default function SettingsScreen() {
   const router = useRouter();
   const auth = useAuth();
   const { theme, setTheme, currentTheme } = useTheme();
+  const { t, i18n } = useTranslation();
 
   const colors =
     currentTheme === "dark" ? DarkTheme.colors : DefaultTheme.colors;
@@ -49,64 +52,71 @@ export default function SettingsScreen() {
   };
 
   const handlePaymentMethods = () => {
-    Alert.alert("Payment Methods", "Here you can manage your payment methods", [
+    Alert.alert(t("settings.paymentMethods"), t("settings.paymentMethods"), [
       { text: "OK" },
     ]);
   };
 
   const handleNotifications = () => {
-    Alert.alert("Notifications", "Configure your notification preferences", [
+    Alert.alert(t("settings.notifications"), t("settings.notifications"), [
       { text: "OK" },
     ]);
   };
 
   const handleLanguage = () => {
-    Alert.alert("Language", "Select your preferred language", [
-      { text: "English", onPress: () => console.log("English selected") },
-      { text: "Spanish", onPress: () => console.log("Spanish selected") },
-      { text: "Cancel", style: "cancel" },
+    Alert.alert(t("settings.language"), t("settings.selectLanguage"), [
+      ...languages.map((lang) => ({
+        text: lang.name,
+        onPress: () => {
+          changeLanguage(lang.code);
+          console.log(`${lang.name} selected`);
+        },
+        style:
+          i18n.language === lang.code
+            ? ("destructive" as const)
+            : ("default" as const),
+      })),
+      { text: t("common.cancel"), style: "cancel" as const },
     ]);
   };
 
   const handleCurrency = () => {
-    Alert.alert("Currency", "Select your preferred currency", [
+    Alert.alert(t("settings.currency"), t("settings.selectCurrency"), [
       { text: "USD ($)", onPress: () => console.log("USD selected") },
       { text: "EUR (€)", onPress: () => console.log("EUR selected") },
       { text: "GBP (£)", onPress: () => console.log("GBP selected") },
-      { text: "Cancel", style: "cancel" },
+      { text: t("common.cancel"), style: "cancel" },
     ]);
   };
 
   const handleHelp = () => {
-    Alert.alert("Help & Support", "Contact us at support@subtracker.com", [
+    Alert.alert(t("settings.help"), t("settings.helpMessage"), [
       { text: "OK" },
     ]);
   };
 
   const handleAbout = () => {
-    Alert.alert(
-      "About",
-      "Subscription Tracker v1.0.0\n\nTrack and manage your subscriptions with ease.",
-      [{ text: "OK" }]
-    );
+    Alert.alert(t("settings.about"), t("settings.aboutMessage"), [
+      { text: "OK" },
+    ]);
   };
 
   const handleLogout = () => {
     console.log("Logout button pressed");
     if (!auth.signOut) {
       console.error("signOut function is not available!");
-      Alert.alert("Error", "Logout functionality is not available");
+      Alert.alert(t("common.error"), t("settings.logoutError"));
       return;
     }
 
-    Alert.alert("Logout", "Are you sure you want to logout?", [
+    Alert.alert(t("settings.logout"), t("settings.logoutConfirmation"), [
       {
-        text: "Cancel",
+        text: t("common.cancel"),
         style: "cancel",
         onPress: () => console.log("Logout cancelled"),
       },
       {
-        text: "Logout",
+        text: t("settings.logout"),
         style: "destructive",
         onPress: async () => {
           console.log("Logout confirmed, attempting to sign out...");
@@ -116,7 +126,7 @@ export default function SettingsScreen() {
             console.log("SignOut completed successfully");
           } catch (error) {
             console.error("Logout error:", error);
-            Alert.alert("Error", "Failed to logout. Please try again.");
+            Alert.alert(t("common.error"), t("settings.logoutError"));
           }
         },
       },
@@ -126,24 +136,28 @@ export default function SettingsScreen() {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={[styles.header, { borderBottomColor: colors.border }]}>
-        <ThemedText type="title">Settings</ThemedText>
+        <ThemedText type="title">{t("settings.settings")}</ThemedText>
       </View>
 
       <ScrollView style={styles.content}>
         <View style={styles.section}>
           <ThemedText type="subtitle" style={styles.sectionTitle}>
-            Account
+            {t("settings.account")}
           </ThemedText>
           <View style={[styles.settingsList, { backgroundColor: colors.card }]}>
-            <SettingItem icon="user" title="Profile" onPress={handleProfile} />
+            <SettingItem
+              icon="user"
+              title={t("settings.profile")}
+              onPress={handleProfile}
+            />
             <SettingItem
               icon="credit-card"
-              title="Payment Methods"
+              title={t("settings.paymentMethods")}
               onPress={handlePaymentMethods}
             />
             <SettingItem
               icon="bell"
-              title="Notifications"
+              title={t("settings.notifications")}
               onPress={handleNotifications}
             />
           </View>
@@ -151,43 +165,43 @@ export default function SettingsScreen() {
 
         <View style={styles.section}>
           <ThemedText type="subtitle" style={styles.sectionTitle}>
-            Preferences
+            {t("settings.preferences")}
           </ThemedText>
           <View style={[styles.settingsList, { backgroundColor: colors.card }]}>
             <SettingItem
               icon="globe"
-              title="Language"
+              title={t("settings.language")}
               onPress={handleLanguage}
             />
             <SettingItem
               icon="dollar"
-              title="Currency"
+              title={t("settings.currency")}
               onPress={handleCurrency}
             />
             <SettingItem
               icon="adjust"
-              title="Theme"
+              title={t("settings.theme")}
               onPress={() => {
                 Alert.alert(
-                  "Theme",
-                  "Select your preferred theme",
+                  t("settings.theme"),
+                  t("settings.selectTheme"),
                   [
                     {
-                      text: "Light",
+                      text: t("settings.light"),
                       onPress: () => setTheme("light"),
                       style: theme === "light" ? "destructive" : "default",
                     },
                     {
-                      text: "Dark",
+                      text: t("settings.dark"),
                       onPress: () => setTheme("dark"),
                       style: theme === "dark" ? "destructive" : "default",
                     },
                     {
-                      text: "System",
+                      text: t("settings.system"),
                       onPress: () => setTheme("system"),
                       style: theme === "system" ? "destructive" : "default",
                     },
-                    { text: "Cancel", style: "cancel" },
+                    { text: t("common.cancel"), style: "cancel" },
                   ],
                   { cancelable: true }
                 );
@@ -198,17 +212,17 @@ export default function SettingsScreen() {
 
         <View style={styles.section}>
           <ThemedText type="subtitle" style={styles.sectionTitle}>
-            Support
+            {t("settings.support")}
           </ThemedText>
           <View style={[styles.settingsList, { backgroundColor: colors.card }]}>
             <SettingItem
               icon="question-circle"
-              title="Help"
+              title={t("settings.help")}
               onPress={handleHelp}
             />
             <SettingItem
               icon="info-circle"
-              title="About"
+              title={t("settings.about")}
               onPress={handleAbout}
             />
           </View>
@@ -222,7 +236,9 @@ export default function SettingsScreen() {
             ]}
             onPress={handleLogout}
           >
-            <ThemedText style={styles.logoutText}>Log Out</ThemedText>
+            <ThemedText style={styles.logoutText}>
+              {t("settings.logout")}
+            </ThemedText>
           </Pressable>
         </View>
       </ScrollView>

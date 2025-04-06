@@ -17,6 +17,7 @@ import { DarkTheme, DefaultTheme } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import * as ImagePicker from "expo-image-picker";
+import { useTranslation } from "react-i18next";
 
 export default function ProfileScreen() {
   const [isEditing, setIsEditing] = useState(false);
@@ -28,6 +29,7 @@ export default function ProfileScreen() {
   const router = useRouter();
   const { user } = useAuth();
   const { currentTheme } = useTheme();
+  const { t } = useTranslation();
   const colors =
     currentTheme === "dark" ? DarkTheme.colors : DefaultTheme.colors;
 
@@ -35,8 +37,8 @@ export default function ProfileScreen() {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
       Alert.alert(
-        "Permission Required",
-        "Please grant camera roll permissions to change your profile picture."
+        t("profile.permissionRequired"),
+        t("profile.cameraRollPermission")
       );
       return;
     }
@@ -55,7 +57,7 @@ export default function ProfileScreen() {
 
   const handleSave = () => {
     // Here you would typically update the user's profile in your backend
-    Alert.alert("Success", "Profile updated successfully!");
+    Alert.alert(t("common.success"), t("profile.profileUpdated"));
     setIsEditing(false);
   };
 
@@ -87,19 +89,23 @@ export default function ProfileScreen() {
         <View style={styles.section}>
           <View style={[styles.card, { backgroundColor: colors.card }]}>
             <View style={styles.cardHeader}>
-              <ThemedText type="subtitle">Personal Information</ThemedText>
+              <ThemedText type="subtitle">
+                {t("profile.personalInfo")}
+              </ThemedText>
               <TouchableOpacity
                 onPress={() => setIsEditing(!isEditing)}
                 style={styles.editButton}
               >
                 <ThemedText style={{ color: "#FF6B6B" }}>
-                  {isEditing ? "Cancel" : "Edit"}
+                  {isEditing ? t("common.cancel") : t("common.edit")}
                 </ThemedText>
               </TouchableOpacity>
             </View>
 
             <View style={styles.inputGroup}>
-              <ThemedText style={styles.label}>Display Name</ThemedText>
+              <ThemedText style={styles.label}>
+                {t("profile.displayName")}
+              </ThemedText>
               <TextInput
                 style={[
                   styles.input,
@@ -111,14 +117,16 @@ export default function ProfileScreen() {
                 ]}
                 value={displayName}
                 onChangeText={setDisplayName}
-                placeholder="Enter your name"
+                placeholder={t("profile.enterName")}
                 placeholderTextColor={colors.text + "80"}
                 editable={isEditing}
               />
             </View>
 
             <View style={styles.inputGroup}>
-              <ThemedText style={styles.label}>Phone Number</ThemedText>
+              <ThemedText style={styles.label}>
+                {t("profile.phoneNumber")}
+              </ThemedText>
               <TextInput
                 style={[
                   styles.input,
@@ -130,7 +138,7 @@ export default function ProfileScreen() {
                 ]}
                 value={phoneNumber}
                 onChangeText={setPhoneNumber}
-                placeholder="Enter your phone number"
+                placeholder={t("profile.enterPhone")}
                 placeholderTextColor={colors.text + "80"}
                 keyboardType="phone-pad"
                 editable={isEditing}
@@ -138,7 +146,7 @@ export default function ProfileScreen() {
             </View>
 
             <View style={styles.inputGroup}>
-              <ThemedText style={styles.label}>Bio</ThemedText>
+              <ThemedText style={styles.label}>{t("profile.bio")}</ThemedText>
               <TextInput
                 style={[
                   styles.input,
@@ -151,7 +159,7 @@ export default function ProfileScreen() {
                 ]}
                 value={bio}
                 onChangeText={setBio}
-                placeholder="Tell us about yourself"
+                placeholder={t("profile.tellAboutYourself")}
                 placeholderTextColor={colors.text + "80"}
                 multiline
                 numberOfLines={4}
@@ -168,7 +176,7 @@ export default function ProfileScreen() {
                   style={styles.gradient}
                 >
                   <ThemedText style={styles.saveButtonText}>
-                    Save Changes
+                    {t("profile.saveChanges")}
                   </ThemedText>
                 </LinearGradient>
               </TouchableOpacity>
